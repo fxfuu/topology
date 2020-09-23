@@ -1,4 +1,4 @@
-import { registerNode } from '@topology/core';
+import { registerNode } from 'csie-topology-core';
 import { flowData, flowDataAnchors, flowDataIconRect, flowDataTextRect } from './data';
 import { flowSubprocess, flowSubprocessIconRect, flowSubprocessTextRect } from './subprocess';
 import { flowDb, flowDbIconRect, flowDbTextRect } from './db';

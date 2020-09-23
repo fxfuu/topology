@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { Store } from 'le5le-store';
 
-import { Point } from '@topology/core';
+import { Point } from 'csie-topology-core';
 
 import { ToolsService } from './tools.service';
 import { Tools } from './tools';

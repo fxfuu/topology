@@ -1,6 +1,6 @@
 {
-  "name": "@topology/layout",
-  "version": "0.3.0",
+  "name": "csie-topology-layout",
+  "version": "0.0.1",
   "description": "A layout tool for le5le-topology.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/le5le-com/topology#readme",
   "peerDependencies": {
-    "@topology/core": "^0.3.0"
+    "csie-topology-core": "^0.0.1"
   },
   "publishConfig": {
     "access": "public"

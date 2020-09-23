@@ -1,12 +1,12 @@
-import { Store } from 'le5le-store';
+import {Store} from 'le5le-store';
 
-import { Pen, PenType } from './models/pen';
-import { Node } from './models/node';
-import { Line } from './models/line';
-import { TopologyData } from './models/data';
-import { Options } from './options';
-import { Layer } from './layer';
-import { s8 } from './utils';
+import {Pen, PenType} from './models/pen';
+import {Node} from './models/node';
+import {Line} from './models/line';
+import {TopologyData} from './models/data';
+import {Options} from './options';
+import {Layer} from './layer';
+import {s8} from './utils';
 
 export class AnimateLayer extends Layer {
   protected data: TopologyData;
@@ -16,6 +16,7 @@ export class AnimateLayer extends Layer {
   private lastNow = 0;
   private subscribeUpdate: any;
   private subscribePlay: any;
+
   constructor(public options: Options = {}, TID: String) {
     super(TID);
     this.data = Store.get(this.generateStoreKey('topology-data'));
@@ -51,10 +52,11 @@ export class AnimateLayer extends Layer {
       l.animateToSize = l.toArrowSize + l.lineWidth * 5;
     }
     l.animateStart = item.animateStart;
-    l.lineCap = 'round';
+    l.lineCap = 'butt';
     l.fillStyle = '#fff';
     l.strokeStyle = l.animateColor || this.options.animateColor;
     l.length = l.getLen();
+    l.lineWidth = l.animateDotSize;
     if (!l.fromArrowColor) {
       l.fromArrowColor = l.strokeStyle || '#222';
     }

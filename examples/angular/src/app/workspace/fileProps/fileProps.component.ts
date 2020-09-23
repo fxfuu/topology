@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Topology } from '@topology/core';
-import { layout } from '@topology/layout';
+import { Topology } from 'csie-topology-core';
+import { layout } from 'csie-topology-layout';
 
 @Component({
   selector: 'app-file-props',

@@ -1,4 +1,4 @@
-import { Pen, Node, Rect } from '@topology/core';
+import { Pen, Node, Rect } from 'csie-topology-core';
 
 export function alignNodes(pens: Pen[], rect: Rect, align: string) {
   for (const item of pens) {

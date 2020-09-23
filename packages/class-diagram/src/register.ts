@@ -1,4 +1,4 @@
-import { registerNode } from '@topology/core';
+import { registerNode } from 'csie-topology-core';
 import {
   simpleClass, simpleClassIconRect, simpleClassTextRect,
   interfaceClass, interfaceClassIconRect, interfaceClassTextRect

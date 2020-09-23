@@ -1,4 +1,4 @@
-import { Pen, PenType, getRect } from '@topology/core';
+import { Pen, PenType, getRect } from 'csie-topology-core';
 
 import { alignNodes, spaceBetween } from './align';
 

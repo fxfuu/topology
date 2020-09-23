@@ -1,4 +1,4 @@
-import { Node } from '@topology/core';
+import { Node } from 'csie-topology-core';
 
 export function flowData(ctx: CanvasRenderingContext2D, node: Node) {
   ctx.beginPath();

@@ -1,4 +1,4 @@
-import { s8, Node, createDiv, rectangle } from '@topology/core';
+import { s8, Node, createDiv, rectangle } from 'csie-topology-core';
 
 export const echartsObjs: any = {};
 

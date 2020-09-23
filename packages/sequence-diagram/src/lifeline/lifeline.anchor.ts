@@ -1,4 +1,4 @@
-import { Point, Node, Direction } from '@topology/core';
+import { Point, Node, Direction } from 'csie-topology-core';
 
 export function lifelineAnchors(node: Node) {
   node.anchors.push(new Point(node.rect.x, node.rect.y + 25, Direction.Left));

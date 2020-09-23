@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
-import { Topology, Lock, Options, Pen } from '@topology/core';
+import { Topology, Lock, Options, Pen } from 'csie-topology-core';
 
 import * as FileSaver from 'file-saver';
 import { Store } from 'le5le-store';

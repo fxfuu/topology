@@ -1,4 +1,4 @@
-import { registerNode } from '@topology/core';
+import { registerNode } from 'csie-topology-core';
 import { lifeline, lifelineAnchors, lifelineIconRect, lifelineTextRect } from './lifeline';
 import { sequenceFocus, sequenceFocusAnchors, sequenceFocusIconRect, sequenceFocusTextRect } from './focus';
 

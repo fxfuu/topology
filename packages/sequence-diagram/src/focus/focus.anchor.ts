@@ -1,4 +1,4 @@
-import { Point, Node, Direction } from '@topology/core';
+import { Point, Node, Direction } from 'csie-topology-core';
 
 export function sequenceFocusAnchors(node: Node) {
   node.anchors.push(new Point(node.rect.x + node.rect.width / 2, node.rect.y, Direction.Up));

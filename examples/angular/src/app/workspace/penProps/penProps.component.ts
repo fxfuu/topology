@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Input, SimpleChanges, HostListener } from '@angular/core';
 
-import { Topology, Pen, Node, EventType, EventAction, getRect } from '@topology/core';
-import { alignNodes, spaceBetween, layout } from '@topology/layout';
+import { Topology, Pen, Node, EventType, EventAction, getRect } from 'csie-topology-core';
+import { alignNodes, spaceBetween, layout } from 'csie-topology-layout';
 
 import { PenPropsService } from './penProps.service';
 

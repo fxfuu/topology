@@ -1,4 +1,4 @@
-import { registerNode } from '@topology/core';
+import { registerNode } from 'csie-topology-core';
 import { activityFinal, activityFinalIconRect, activityFinalTextRect } from './final';
 import { fork, forkHAnchors, forkVAnchors, forkIconRect, forkTextRect } from './fork';
 import { swimlaneH, swimlaneHIconRect, swimlaneHTextRect } from './swimlaneH';

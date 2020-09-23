@@ -1,4 +1,4 @@
-import { Node, Rect } from '@topology/core';
+import { Node, Rect } from 'csie-topology-core';
 
 export function simpleClassIconRect(node: Node) {
   node.iconRect = new Rect(0, 0, 0, 0);

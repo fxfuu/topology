@@ -1,12 +1,12 @@
-import { Pen, PenType } from './pen';
-import { Point } from './point';
-import { drawLineFns, drawArrowFns } from '../middles';
-import { getBezierPoint } from '../middles/lines/curve';
-import { Store } from 'le5le-store';
-import { lineLen, curveLen } from '../utils/canvas';
-import { text } from '../middles/nodes/text';
-import { Rect } from './rect';
-import { abs } from '../utils/math';
+import {Pen, PenType} from './pen';
+import {Point} from './point';
+import {drawLineFns, drawArrowFns} from '../middles';
+import {getBezierPoint} from '../middles/lines/curve';
+import {Store} from 'le5le-store';
+import {lineLen, curveLen} from '../utils/canvas';
+import {text} from '../middles/nodes/text';
+import {Rect} from './rect';
+import {abs} from '../utils/math';
 
 export class Line extends Pen {
   from: Point;
@@ -128,6 +128,7 @@ export class Line extends Pen {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    ctx.lineCap = 'butt';
     if (this.animateDot) {
       ctx.fillStyle = this.strokeStyle;
       if (this.animateType === 'dot') {

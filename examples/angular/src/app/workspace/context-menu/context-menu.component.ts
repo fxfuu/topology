@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Clipboard } from 'ts-clipboard';
 import { NoticeService } from 'le5le-components/notice';
 
-import { Topology, Lock, Pen } from '@topology/core';
+import { Topology, Lock, Pen } from 'csie-topology-core';
 
 @Component({
   selector: 'app-context-menu',

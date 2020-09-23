@@ -1,4 +1,4 @@
-import { registerNode, loadJS } from '@topology/core';
+import { registerNode, loadJS } from 'csie-topology-core';
 import { echarts, echartsObjs } from './echarts';
 
 export function register(_echarts?: any) {

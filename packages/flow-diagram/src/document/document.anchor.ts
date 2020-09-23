@@ -1,4 +1,4 @@
-import { Node, Point, Direction } from '@topology/core';
+import { Node, Point, Direction } from 'csie-topology-core';
 
 export function flowDocumentAnchors(node: Node) {
   node.anchors.push(new Point(node.rect.x, node.rect.y + node.rect.height / 2, Direction.Left));
