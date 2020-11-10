@@ -14,18 +14,20 @@
     "target": "es2015",
     "lib": ["es2018", "dom"],
     "paths": {
-      "@topology/core": ["../../packages/core"],
-      "@topology/core/*": ["../../packages/core/src/*"],
-      "@topology/flow-diagram": ["../../packages/flow-diagram"],
-      "@topology/activity-diagram": ["../../packages/activity-diagram"],
-      "@topology/class-diagram": ["../../packages/class-diagram"],
-      "@topology/sequence-diagram": ["../../packages/sequence-diagram"],
-      "@topology/chart-diagram": ["../../packages/chart-diagram"],
-      "@topology/layout": ["../../packages/layout"]
+      "csie-topology-core": ["../../packages/core"],
+      "csie-topology-core/*": ["../../packages/core/src/*"],
+      "csie-topology-flow-diagram": ["../../packages/flow-diagram"],
+      "csie-topology-activity-diagram": ["../../packages/activity-diagram"],
+      "csie-topology-class-diagram": ["../../packages/class-diagram"],
+      "csie-topology-sequence-diagram": ["../../packages/sequence-diagram"],
+      "csie-topology-chart-diagram": ["../../packages/chart-diagram"],
+      "csie-topology-layout": ["../../packages/layout"]
     }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
-  }
+  },
+  "files": ["src/main.ts", "src/polyfills.ts"],
+  "include": ["src/**/*.d.ts"]
 }

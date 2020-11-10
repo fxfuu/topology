@@ -393,14 +393,14 @@ export class Line extends Pen {
     switch (this.animateType) {
       case 'beads':
         this.lineDashOffset = -this.animatePos;
-        let len = this.lineWidth;
+        let len = this.lineWidth * 2.6;
         if (len < 5) {
           len = 5;
         }
         if (this.animateLineDash) {
           this.lineDash = this.animateLineDash;
         } else {
-          this.lineDash = [len, len * 2];
+          this.lineDash = [len, len * 0.8];
         }
         break;
       case 'dot':
