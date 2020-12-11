@@ -47,10 +47,17 @@ export class Line extends Pen {
     this.type = PenType.Line;
     if (json) {
       if (json.from) {
-        this.from = new Point(json.from.x, json.from.y, json.from.direction, json.from.anchorIndex, json.from.id);
+        this.from = new Point(
+          json.from.x,
+          json.from.y,
+          json.from.direction,
+          json.from.anchorIndex,
+          json.from.id,
+          json.autoAnchor
+        );
       }
       if (json.to) {
-        this.to = new Point(json.to.x, json.to.y, json.to.direction, json.to.anchorIndex, json.to.id);
+        this.to = new Point(json.to.x, json.to.y, json.to.direction, json.to.anchorIndex, json.to.id, json.autoAnchor);
       }
 
       this.fromArrow = json.fromArrow || '';
@@ -62,11 +69,20 @@ export class Line extends Pen {
       if (json.animateColor) {
         this.animateColor = json.animateColor;
       }
+      if (json.animatePos) {
+        this.animatePos = json.animatePos;
+      }
       if (json.animateSpan) {
         this.animateSpan = json.animateSpan;
       }
       if (json.animateLineDash) {
         this.animateLineDash = json.animateLineDash;
+      }
+      if (json.animatePlay) {
+        this.animatePlay = json.animatePlay;
+      }
+      if (json.animateStart) {
+        this.animateStart = json.animateStart;
       }
       if (json.length) {
         this.length = json.length;
@@ -286,7 +302,7 @@ export class Line extends Pen {
         center = this.getLineCenter(this.from, this.to);
         break;
       case 'polyline':
-        const i = Math.floor(this.controlPoints.length / 2);
+        const i = Math.round(this.controlPoints.length / 2);
         center = this.getLineCenter(this.controlPoints[i - 1] || this.from, this.controlPoints[i] || this.to);
         break;
       case 'curve':
@@ -416,6 +432,7 @@ export class Line extends Pen {
     if (this.animatePos > this.length + this.animateSpan - this.animateFromSize - this.animateToSize) {
       if (++this.animateCycleIndex >= this.animateCycle && this.animateCycle > 0) {
         this.animateStart = 0;
+        this.animatePos = 0;
         Store.set(this.generateStoreKey('animateEnd'), {
           type: 'line',
           data: this,
@@ -467,6 +484,8 @@ export class Line extends Pen {
     this.from.y = center.y - (center.y - this.from.y) * scale;
     this.to.x = center.x - (center.x - this.to.x) * scale;
     this.to.y = center.y - (center.y - this.to.y) * scale;
+    this.lineWidth *= scale;
+    this.borderWidth *= scale;
     if (this.text && this.font && this.font.fontSize) {
       this.font.fontSize *= scale;
       this.textRect = null;
@@ -478,6 +497,12 @@ export class Line extends Pen {
     }
 
     Store.set(this.generateStoreKey('pts-') + this.id, null);
+  }
+
+  hit(pt: Point, padding = 0): any {
+    if (this.from.hit(pt, padding) || this.to.hit(pt, padding)) {
+      return this;
+    }
   }
 
   clone() {

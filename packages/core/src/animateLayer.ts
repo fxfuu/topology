@@ -1,12 +1,13 @@
 import {Store} from 'le5le-store';
 
-import {Pen, PenType} from './models/pen';
-import {Node} from './models/node';
-import {Line} from './models/line';
-import {TopologyData} from './models/data';
-import {Options} from './options';
-import {Layer} from './layer';
-import {s8} from './utils';
+import { Pen, PenType } from './models/pen';
+import { Node } from './models/node';
+import { Line } from './models/line';
+import { TopologyData } from './models/data';
+import { Options } from './options';
+import { Layer } from './layer';
+import { s8 } from './utils/uuid';
+import { find } from './utils/canvas';
 
 export class AnimateLayer extends Layer {
   protected data: TopologyData;
@@ -16,8 +17,7 @@ export class AnimateLayer extends Layer {
   private lastNow = 0;
   private subscribeUpdate: any;
   private subscribePlay: any;
-
-  constructor(public options: Options = {}, TID: String) {
+  constructor(public options: Options = {}, TID: string) {
     super(TID);
     this.data = Store.get(this.generateStoreKey('topology-data'));
     Store.set(this.generateStoreKey('LT:AnimateLayer'), this);
@@ -31,8 +31,24 @@ export class AnimateLayer extends Layer {
     });
     this.subscribePlay = Store.subscribe(
       this.generateStoreKey('LT:AnimatePlay'),
-      (params: { tag: string; pen: Pen }) => {
-        this.readyPlay(params.tag, false);
+      (params: { tag: string; stop?: boolean }) => {
+        if (params.stop && params.tag) {
+          const pen = find(params.tag, this.data.pens);
+          if (pen && (pen as any).id) {
+            if (this.pens.has((pen as any).id)) {
+              this.pens.get((pen as any).id).animateStart = 0;
+            }
+          } else if (pen) {
+            (pen as Pen[]).forEach((item) => {
+              if (this.pens.has(item.id)) {
+                this.pens.get(item.id).animateStart = 0;
+              }
+            });
+          }
+        } else if (!params.stop) {
+          this.readyPlay(params.tag, false);
+        }
+
         this.animate();
       }
     );
@@ -136,6 +152,11 @@ export class AnimateLayer extends Layer {
         if (!pen.animateStart || pen.animateStart < 1) {
           if (pen.type) {
             this.pens.delete(pen.data);
+            const line = this.findLine(pen);
+            if (line) {
+              line.animateStart = 0;
+              (line as any).animatePos = (pen as any).animatePos;
+            }
           } else {
             this.pens.delete(pen.id);
           }
@@ -165,7 +186,10 @@ export class AnimateLayer extends Layer {
           }
           if (pen.type === PenType.Line) {
             const line = this.findLine(pen);
-            line && (line.animateStart = 0);
+            if (line) {
+              line.animateStart = 0;
+              (line as any).animatePos = (pen as any).animatePos;
+            }
           }
           if (pen.nextAnimate) {
             this.readyPlay(pen.nextAnimate, false);
@@ -188,7 +212,7 @@ export class AnimateLayer extends Layer {
       }
 
       for (const item of lines) {
-        if (line.id === item.id) {
+        if (line.data === item.id) {
           line.from = item.from;
           line.to = item.to;
           line.controlPoints = item.controlPoints;

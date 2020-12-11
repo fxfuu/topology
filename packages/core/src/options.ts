@@ -4,6 +4,7 @@ export enum KeyType {
   Ctrl,
   Shift,
   Alt,
+  Any,
 }
 
 export enum KeydownType {
@@ -46,6 +47,7 @@ export interface Options {
   onlySizeY?: boolean;
   anchorSize?: number;
   alwaysAnchor?: boolean;
+  autoAnchor?: boolean;
   disableEmptyLine?: boolean;
   disableRepeatLine?: boolean;
   disableScale?: boolean;
@@ -62,6 +64,8 @@ export interface Options {
   autoExpandDistance?: number;
   keydown?: KeydownType;
   viewPadding?: Padding;
+  grid?: boolean;
+  rule?: boolean;
   on?: (event: string, data: any) => void;
 }
 
@@ -76,13 +80,13 @@ export const DefalutOptions: Options = {
     textBaseline: 'middle',
   },
   color: '#222',
+  activeColor: '#1890ff',
   hoverColor: '#fa541c',
   anchorRadius: 4,
   anchorFillStyle: '#fff',
   dockStrokeStyle: '#fa541c',
   dockFillStyle: '#fa541c',
   dragColor: '#1890ff',
-  activeColor: '#1890ff',
   rotateCursor: '/assets/img/rotate.cur',
   hoverCursor: 'pointer',
   minScale: 0.25,
@@ -91,4 +95,5 @@ export const DefalutOptions: Options = {
   autoExpandDistance: 200,
   keydown: KeydownType.Document,
   viewPadding: 0,
+  autoAnchor: true,
 };
