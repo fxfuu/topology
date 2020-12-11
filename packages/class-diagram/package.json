@@ -1,6 +1,6 @@
 {
   "name": "csie-topology-class-diagram",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A class diagram tool using le5le-topology.",
   "main": "index.js",
   "types": "index.d.ts",
