@@ -60,7 +60,7 @@ export class HoverLayer extends Layer {
     Store.set(this.generateStoreKey('LT:updateLines'), [this.line]);
   }
 
-  lineMove(pt: Point, initPos: { x: number; y: number }) {
+  lineMove(pt: { x: number; y: number }, initPos: { x: number; y: number }) {
     if (this.line.locked) {
       return;
     }
@@ -207,7 +207,7 @@ export class HoverLayer extends Layer {
       ctx.fill();
     }
 
-    ctx.strokeStyle = rgba(0.5, this.options.dragColor);
+    ctx.strokeStyle = rgba(0.5, this.options.hoverColor);
     ctx.lineWidth = 1;
 
     if (this.dockLineX > 0) {

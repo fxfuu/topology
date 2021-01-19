@@ -31,22 +31,41 @@ export class AnimateLayer extends Layer {
     });
     this.subscribePlay = Store.subscribe(
       this.generateStoreKey('LT:AnimatePlay'),
-      (params: { tag: string; stop?: boolean }) => {
-        if (params.stop && params.tag) {
-          const pen = find(params.tag, this.data.pens);
-          if (pen && (pen as any).id) {
-            if (this.pens.has((pen as any).id)) {
-              this.pens.get((pen as any).id).animateStart = 0;
-            }
-          } else if (pen) {
-            (pen as Pen[]).forEach((item) => {
-              if (this.pens.has(item.id)) {
-                this.pens.get(item.id).animateStart = 0;
+      (params: { stop?: boolean; tag?: string; pen?: Pen }) => {
+        if (params.stop) {
+          if (params.tag) {
+            const pen = find(params.tag, this.data.pens);
+            if (pen && (pen as any).id) {
+              if (this.pens.has((pen as any).id)) {
+                this.pens.get((pen as any).id).animateStart = 0;
               }
-            });
+            } else if (pen) {
+              (pen as Pen[]).forEach((item) => {
+                if (this.pens.has(item.id)) {
+                  this.pens.get(item.id).animateStart = 0;
+                }
+              });
+            }
           }
-        } else if (!params.stop) {
-          this.readyPlay(params.tag, false);
+
+          if (params.pen && this.pens.has(params.pen.id)) {
+            this.pens.get(params.pen.id).animateStart = 0;
+          }
+        } else {
+          if (params.pen) {
+            if (this.pens.has(params.pen.id)) {
+              this.pens.get(params.pen.id).animateStart = Date.now();
+            } else {
+              if (params.pen.type) {
+                this.pens.set(params.pen.id, this.getAnimateLine(params.pen));
+              } else {
+                this.pens.set(params.pen.id, params.pen);
+              }
+            }
+          }
+          if (params.tag) {
+            this.readyPlay(params.tag, false);
+          }
         }
 
         this.animate();
@@ -74,10 +93,10 @@ export class AnimateLayer extends Layer {
     l.length = l.getLen();
     l.lineWidth = l.animateDotSize;
     if (!l.fromArrowColor) {
-      l.fromArrowColor = l.strokeStyle || '#222';
+      l.fromArrowColor = l.strokeStyle || Store.get(this.generateStoreKey('LT:color'));
     }
     if (!l.toArrowColor) {
-      l.toArrowColor = l.strokeStyle || '#222';
+      l.toArrowColor = l.strokeStyle || Store.get(this.generateStoreKey('LT:color'));
     }
 
     return l;
@@ -111,7 +130,10 @@ export class AnimateLayer extends Layer {
 
       if (pen instanceof Node) {
         if (pen.animateStart > 0) {
-          pen.initAnimateProps();
+          if (!pen.animateReady) {
+            pen.initAnimate();
+          }
+
           readyPens.set(pen.id, pen);
         }
         if (pen.children && pen.children.length) {
@@ -142,7 +164,7 @@ export class AnimateLayer extends Layer {
 
     this.timer = requestAnimationFrame(() => {
       const now = Date.now();
-      if (now - this.lastNow < 30) {
+      if (now - this.lastNow < this.options.refresh) {
         this.animate();
         return;
       }
