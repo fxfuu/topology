@@ -1,30 +1,31 @@
-import { Store, Observer } from 'le5le-store';
+import {Store, Observer} from 'le5le-store';
 // https://github.com/developit/mitt
-import { default as mitt, Emitter, EventType, Handler } from 'mitt';
-import { Options, KeyType, KeydownType, DefalutOptions, Padding } from './options';
-import { Pen, PenType } from './models/pen';
-import { Node } from './models/node';
-import { Point } from './models/point';
-import { Line } from './models/line';
-import { TopologyData } from './models/data';
-import { Lock, AnchorMode } from './models/status';
-import { drawNodeFns, drawLineFns } from './middles/index';
-import { Offscreen } from './offscreen';
-import { RenderLayer } from './renderLayer';
-import { HoverLayer } from './hoverLayer';
-import { ActiveLayer } from './activeLayer';
-import { AnimateLayer } from './animateLayer';
-import { DivLayer } from './divLayer';
-import { Rect } from './models/rect';
-import { s8 } from './utils/uuid';
-import { del, find, getParent, pointInRect } from './utils/canvas';
-import { getRect } from './utils/rect';
-import { formatPadding } from './utils/padding';
-import { Socket } from './socket';
-import { MQTT } from './mqtt';
-import { Direction } from './models';
+import {default as mitt, Emitter, EventType, Handler} from 'mitt';
+import {Options, KeyType, KeydownType, DefalutOptions, Padding} from './options';
+import {Pen, PenType} from './models/pen';
+import {Node} from './models/node';
+import {Point} from './models/point';
+import {Line} from './models/line';
+import {TopologyData} from './models/data';
+import {Lock, AnchorMode} from './models/status';
+import {drawNodeFns, drawLineFns} from './middles/index';
+import {Offscreen} from './offscreen';
+import {RenderLayer} from './renderLayer';
+import {HoverLayer} from './hoverLayer';
+import {ActiveLayer} from './activeLayer';
+import {AnimateLayer} from './animateLayer';
+import {DivLayer} from './divLayer';
+import {Rect} from './models/rect';
+import {s8} from './utils/uuid';
+import {del, find, getParent, pointInRect} from './utils/canvas';
+import {getRect} from './utils/rect';
+import {formatPadding} from './utils/padding';
+import {Socket} from './socket';
+import {MQTT} from './mqtt';
+import {Direction} from './models';
 
 const resizeCursors = ['nw-resize', 'ne-resize', 'se-resize', 'sw-resize'];
+
 enum MoveInType {
   None,
   Line,
@@ -78,7 +79,7 @@ export class Topology {
   input = document.createElement('textarea');
   inputObj: Pen;
   mouseDown: { x: number; y: number; restore?: boolean };
-  lastTranlated = { x: 0, y: 0 };
+  lastTranlated = {x: 0, y: 0};
   moveIn: {
     type: MoveInType;
     activeAnchorIndex: number;
@@ -110,6 +111,7 @@ export class Topology {
   private scheduledAnimationFrame = false;
   private scrolling = false;
   private rendering = false;
+
   constructor(parent: string | HTMLElement, options?: Options) {
     this.id = s8();
     this._emitter = mitt();
@@ -148,11 +150,14 @@ export class Topology {
       }
       try {
         const json = event.dataTransfer.getData('Topology') || event.dataTransfer.getData('Text');
-        if (!json) return;
+        if (!json) {
+          return;
+        }
         const obj = JSON.parse(json);
         event.preventDefault();
         this.dropNodes(Array.isArray(obj) ? obj : [obj], event.offsetX, event.offsetY);
-      } catch {}
+      } catch {
+      }
     };
     this.subcribe = Store.subscribe(this.generateStoreKey('LT:render'), () => {
       this.render();
@@ -334,6 +339,18 @@ export class Topology {
           ),
           true
         );
+      } else if (json.name === 'lineAlone') {
+        this.addLine(
+          {
+            name: this.data.lineName,
+            from: new Point(json.rect.x, json.rect.y),
+            fromArrow: this.data.fromArrow,
+            to: new Point(json.rect.x + json.rect.width, json.rect.y + json.rect.height),
+            toArrow: this.data.toArrow,
+            strokeStyle: this.options.color,
+          },
+          true
+        );
       } else {
         const node = new Node(json);
         this.addNode(node, true);
@@ -355,7 +372,7 @@ export class Topology {
       y += currentTarget.offsetTop;
       currentTarget = currentTarget.offsetParent;
     }
-    return { offsetX: touch.pageX - x, offsetY: touch.pageY - y };
+    return {offsetX: touch.pageX - x, offsetY: touch.pageY - y};
   }
 
   private ontouched(event: TouchEvent) {
@@ -451,7 +468,7 @@ export class Topology {
   // open - redraw by the data
   open(data?: any) {
     if (!data) {
-      data = { pens: [] };
+      data = {pens: []};
     }
     if (typeof data === 'string') {
       data = JSON.parse(data);
@@ -501,7 +518,7 @@ export class Topology {
 
     this.data.websocket = data.websocket;
     this.data.mqttUrl = data.mqttUrl;
-    this.data.mqttOptions = data.mqttOptions || { clientId: s8() };
+    this.data.mqttOptions = data.mqttOptions || {clientId: s8()};
     this.data.mqttTopics = data.mqttTopics;
     this.data.grid = data.grid;
     this.data.gridColor = data.gridColor;
@@ -558,7 +575,7 @@ export class Topology {
 
   overflow() {
     const rect = this.getRect();
-    let { width, height } = this.canvas;
+    let {width, height} = this.canvas;
     const maxWidth = Math.max(rect.width, rect.ex);
     const maxHeight = Math.max(rect.height, rect.ey);
     const offset = 50;
@@ -568,7 +585,7 @@ export class Topology {
     if (height < maxHeight) {
       height = maxHeight + offset;
     }
-    this.resize({ width, height });
+    this.resize({width, height});
     return rect;
   }
 
@@ -645,7 +662,9 @@ export class Topology {
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
     const pos = new Point(e.x - (canvasPos.x || canvasPos.left), e.y - (canvasPos.y || canvasPos.top));
 
-    if (this.raf) cancelAnimationFrame(this.raf);
+    if (this.raf) {
+      cancelAnimationFrame(this.raf);
+    }
     this.raf = requestAnimationFrame(() => {
       this.raf = null;
 
@@ -818,10 +837,12 @@ export class Topology {
   };
 
   private onmousedown = (e: MouseEvent) => {
-    if (e.button !== 0 && e.button !== 2) return;
+    if (e.button !== 0 && e.button !== 2) {
+      return;
+    }
 
     const canvasPos = this.divLayer.canvas.getBoundingClientRect() as DOMRect;
-    this.mouseDown = { x: e.x - (canvasPos.x || canvasPos.left), y: e.y - (canvasPos.y || canvasPos.top) };
+    this.mouseDown = {x: e.x - (canvasPos.x || canvasPos.left), y: e.y - (canvasPos.y || canvasPos.top)};
     if (e.altKey) {
       this.divLayer.canvas.style.cursor = 'move';
     }
@@ -958,7 +979,9 @@ export class Topology {
   };
 
   private onmouseup = (e: MouseEvent) => {
-    if (!this.mouseDown) return;
+    if (!this.mouseDown) {
+      return;
+    }
 
     this.mouseDown = null;
     this.lastTranlated.x = 0;
@@ -2185,7 +2208,7 @@ export class Topology {
     this.render();
     this.cache();
 
-    this.dispatch('translate', { x, y });
+    this.dispatch('translate', {x, y});
   }
 
   // scale for scaled canvas:
@@ -2230,12 +2253,14 @@ export class Topology {
   }
 
   centerView(padding?: Padding) {
-    if (!this.hasView()) return;
+    if (!this.hasView()) {
+      return;
+    }
     const rect = this.getRect();
     const viewCenter = this.getViewCenter(padding);
-    const { center } = rect;
+    const {center} = rect;
     this.translate(viewCenter.x - center.x, viewCenter.y - center.y);
-    const { parentElem } = this.canvas;
+    const {parentElem} = this.canvas;
     const x = (parentElem.scrollWidth - parentElem.offsetWidth) / 2;
     const y = (parentElem.scrollHeight - parentElem.offsetHeight) / 2;
     parentElem.scrollTo(x, y);
@@ -2243,10 +2268,12 @@ export class Topology {
   }
 
   fitView(viewPadding?: Padding) {
-    if (!this.hasView()) return;
+    if (!this.hasView()) {
+      return;
+    }
     // 1. 重置画布尺寸为容器尺寸
-    const { parentElem } = this.canvas;
-    const { offsetWidth: width, offsetHeight: height } = parentElem;
+    const {parentElem} = this.canvas;
+    const {offsetWidth: width, offsetHeight: height} = parentElem;
     this.resize({
       width,
       height,
@@ -2274,7 +2301,7 @@ export class Topology {
 
   getViewCenter(viewPadding?: Padding) {
     const padding = formatPadding(viewPadding || this.options.viewPadding);
-    const { width, height } = this.canvas;
+    const {width, height} = this.canvas;
     return {
       x: (width - padding[1] - padding[3]) / 2 + padding[3],
       y: (height - padding[0] - padding[2]) / 2 + padding[0],
